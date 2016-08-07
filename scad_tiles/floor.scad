@@ -9,14 +9,14 @@ difference()
 {
     
     translate([tilex*inch/2,tiley*inch/2,thickness/2])cube([tilex*inch,tiley*inch,thickness],center=true);
-    pocks=floor(rands(0,(tilex*tiley)*.55,1)[0]);
+    pocks=3;//floor(rands(0,(tilex*tiley)*.55,1)[0]);
     echo (pocks);
     for (ii=[0:pocks])
     {
         shapenum = floor(rands(0,16,1)[0])+1;
         angle=floor(rands(0,360,1)[0])+1;
-        xx=inch*(rands(0,tilex,1)[0])+inch/2;
-        yy=inch*(rands(0,tiley,1)[0])+inch/2;
+        xx=inch*(rands(0,tilex,1)[0]);
+        yy=inch*(rands(0,tiley,1)[0]);
         translate([xx,yy,0])rotate([0,0,angle])translate([0,0,thickness])blemish(shapenum);
     }
     for (ii=[0:tilex])

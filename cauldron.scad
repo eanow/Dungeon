@@ -1,0 +1,19 @@
+difference()
+{
+    translate([0,0,25])import("cauldron.stl");
+    intersection()
+    {
+    scale(1.035)translate([0,0,25])import("cauldron.stl");
+    translate([0,-10,0])rotate([90,0,0])scale([.5,.5,5])import("sihedron.stl");
+    }
+    intersection()
+    {
+    scale(1.035)translate([0,0,25])import("cauldron.stl");
+    rotate([0,0,120])translate([0,-10,0])rotate([90,0,0])scale([.5,.5,5])import("sihedron.stl");
+    }
+    intersection()
+    {
+    scale(1.035)translate([0,0,25])import("cauldron.stl");
+    rotate([0,0,-120])translate([0,-10,0])rotate([90,0,0])scale([.5,.5,5])import("sihedron.stl");
+    }
+}

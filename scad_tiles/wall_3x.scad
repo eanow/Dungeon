@@ -1,6 +1,6 @@
 thickness=8.5;
-tilex=6;
-tiley=3;
+tilex=1;
+tiley=6;
 inch=25.4;
 groove=1;
 

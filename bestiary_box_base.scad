@@ -1,6 +1,6 @@
 
 base_t=3.2;
-base_r=2*25.4/2;
+base_r=3*25.4/2;
 gap=2.5;
 round=.5;
 $fs=1;
