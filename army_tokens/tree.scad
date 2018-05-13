@@ -6,14 +6,14 @@ dia=25.4;
 thick=3;
 intersection()
 {
-    linear_extrude(height=10)scale(.138)translate([-625,-751,0])import("tree.dxf");
+    linear_extrude(height=10)scale(.133)translate([-625,-753,0])import("tree.dxf");
     translate([0,0,-(45-2)])sphere(r=45,$fn=150);
 }
 translate([0,0,-3+ep])difference()
 {
     minkowski()
     {
-        translate([0,0,3*round/4])cylinder(r=dia/2,h=thick-round*1.75,$fn=100);
+        translate([0,0,3*round/4])cylinder(r=dia/2-round,h=thick-round*1.75,$fn=100);
         sphere(r=round,$fn=50);
     }
     translate([0,0,-round])cube([dia*2,dia*2,round*2],center=true);

@@ -13,7 +13,7 @@ translate([0,0,-3+ep])difference()
 {
     minkowski()
     {
-        translate([0,0,3*round/4])cylinder(r=dia/2,h=thick-round*1.75,$fn=100);
+        translate([0,0,3*round/4])cylinder(r=dia/2-round,h=thick-round*1.75,$fn=100);
         sphere(r=round,$fn=50);
     }
     translate([0,0,-round])cube([dia*2,dia*2,round*2],center=true);

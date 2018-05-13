@@ -5,7 +5,7 @@ rod=66.5;
 ep=0.01;
 $fa=1;
 $fs=1;
-rc=6; //rods
+rc=5; //rods
 module frame()
 {
     difference()
@@ -15,7 +15,7 @@ module frame()
         translate([0,-(rc*(bead+thick/2)+thick*4)/2,5])cube([rod+thick+2*bead,rc*(bead+thick/2)+thick*4,15],center=true);
         //inner space
         //translate([0,-bead/2-thick/2,5])cube([rod-thick,4*bead+thick*3+thick,20],center=true);
-        translate([0,-(rc*(bead+thick/2)+thick*4)/2,5])cube([rod-thick,rc*(bead+thick/2)+thick*2,20],center=true);
+        translate([0,-(rc*(bead+thick/2)+thick*4)/2,5])cube([rod-thick*2,rc*(bead+thick/2)+thick*2,20],center=true);
         //rods
         for (rody=[1:rc])
         {
@@ -25,11 +25,7 @@ module frame()
         //translate([0,-(bead+thick/2),ep])rod_slot();
         //translate([0,-2*(bead+thick/2),ep])rod_slot();
         //identifiers
-        /*translate([-(rod/2+thick*2-1.5),0,9.5])rotate([0,0,-90])linear_extrude(5)text("2",valign="center",halign="center",font="Liberation Sans:style=Bold");
-        translate([-(rod/2+thick*2-1.5),(bead+thick/2),9.5])rotate([0,0,-90])linear_extrude(5)text("1",valign="center",halign="center",font="Liberation Sans:style=Bold");
-        translate([-(rod/2+thick*2-1.5),-(bead+thick/2),9.5])rotate([0,0,-90])linear_extrude(5)text("3",valign="center",halign="center",font="Liberation Sans:style=Bold");
-        translate([-(rod/2+thick*2-1.5),-2*(bead+thick/2),9.5])rotate([0,0,-90])linear_extrude(5)text("H",valign="center",halign="center",font="Liberation Sans:style=Bold");
-        */
+        
         //insert slots
         for (rody=[1:rc])
         {
@@ -46,8 +42,11 @@ module frame()
     }
 }
 //bead keeper
-translate([-(rod/2-thick-5),-(rc*(bead+thick/2)+thick*4)/2,(8/2)-2.5])cube([thick,rc*(bead+thick/2),8],center=true);
-translate([(rod/2-thick-5),-(rc*(bead+thick/2)+thick*4)/2,(8/2)-2.5])cube([thick,rc*(bead+thick/2),8],center=true);
+module keeper()
+{
+    translate([-(rod/2-thick-7),-(rc*(bead+thick/2)+thick*4)/2,(8/2)-2.5])cube([thick,rc*(bead+thick/2),8],center=true);
+    translate([(rod/2-thick-7),-(rc*(bead+thick/2)+thick*4)/2,(8/2)-2.5])cube([thick,rc*(bead+thick/2),8],center=true);
+}
 //insert();
 module insert()
 {
@@ -91,10 +90,28 @@ module bead()
         cylinder(r=(thick+1)/2,h=thick*4,center=true,$fn=24);
     }
 }
-//bead();
+module split_bead()
+{
+    nub_r=((bead/2)-((thick+1)/2))/2;
+    inside_r=(thick+1)/2;
+    grab_l=.75;
+    difference()
+    {
+        bead();
+        difference()
+        {
+            translate([0,-bead/2,0])cube([(thick+1),bead,thick*2],center=true);
+            translate([inside_r+nub_r-grab_l,-nub_r-inside_r,0])sphere(r=nub_r,$fn=24);
+            translate([-1*(inside_r+nub_r-grab_l),-nub_r-inside_r,0])sphere(r=nub_r,$fn=24);
+        }
+    }
+}
 
+split_bead();
+//bead();
 //rod();
-frame();
+//frame();
+//keeper();
 //split frame
 module split_frame()
 {

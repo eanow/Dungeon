@@ -6,14 +6,14 @@ dia=25.4;
 thick=3;
 intersection()
 {
-    linear_extrude(height=10)scale(.014)translate([-625,-780,0])import("shield.dxf");
+    linear_extrude(height=10)scale(.0148)translate([-625,-800,0])import("shield.dxf");
     translate([0,0,-(45-2)])sphere(r=45,$fn=150);
 }
 translate([0,0,-3+ep])difference()
 {
     minkowski()
     {
-        translate([0,0,3*round/4])cylinder(r=dia/2,h=thick-round*1.75,$fn=100);
+        translate([0,0,3*round/4])cylinder(r=dia/2-round,h=thick-round*1.75,$fn=100);
         sphere(r=round,$fn=50);
     }
     translate([0,0,-round])cube([dia*2,dia*2,round*2],center=true);
