@@ -1,11 +1,13 @@
-floor_thick=8.5;
+
+floor_thick=10.6;
 tiley=3;
 basis=25.4;
 groove=.6;
 bevel=.8;
 
 wall_width=.45;
-wall_height=3; //units of floor_thick tall
+wall_height=25.4; //absolute
+wall_layers=3;
 
 damage=2;
 damage_w=.15;
@@ -18,11 +20,11 @@ magnet_r=6/2;
 //wall
 module wall_base()
 {
-    translate([-wall_width*basis/2,tiley*basis/2,wall_height*floor_thick/2])hull()
+    translate([-wall_width*basis/2,tiley*basis/2,wall_height/2])hull()
     {
-        cube([wall_width*basis-bevel*2,tiley*basis,wall_height*floor_thick-bevel*2],center=true);
-        cube([wall_width*basis-bevel*2,tiley*basis-bevel*2,wall_height*floor_thick],center=true);
-        cube([wall_width*basis,tiley*basis-bevel*2,wall_height*floor_thick-bevel*2],center=true);
+        cube([wall_width*basis-bevel*2,tiley*basis,wall_height-bevel*2],center=true);
+        cube([wall_width*basis-bevel*2,tiley*basis-bevel*2,wall_height],center=true);
+        cube([wall_width*basis,tiley*basis-bevel*2,wall_height-bevel*2],center=true);
     }
 }
 module mag_holes()
@@ -41,17 +43,18 @@ module mag_holes()
 module grids()
 {
     //one for each wall level, horizontal
-    for (ii=[1:wall_height])
+    brick_h=(wall_height-floor_thick)/wall_layers;
+    for (ii=[0:wall_layers-1])
     {
-        translate([0,tiley*basis/2,floor_thick*ii])rotate([0,45,0])cube([groove*sqrt(2),tiley*basis*2,groove*sqrt(2)],center=true);
+        translate([0,tiley*basis/2,floor_thick+ii*brick_h])rotate([0,45,0])cube([groove*sqrt(2),tiley*basis*2,groove*sqrt(2)],center=true);
     }
     //vertical
     //one above floor is off by half, then even, then off
-    for (ii=[1:1:wall_height-1])
+    for (ii=[1:1:wall_layers])
     {
         for(jj=[0:.5:tiley+1])
         {
-        translate([0,jj*basis-(ii%4)*basis/4,floor_thick*ii+floor_thick/2])rotate([0,0,45])cube([groove*sqrt(2),groove*sqrt(2),floor_thick],center=true);
+        translate([0,jj*basis-(ii%6)*basis/6,floor_thick+ii*brick_h-brick_h/2])rotate([0,0,45])cube([groove*sqrt(2),groove*sqrt(2),brick_h],center=true);
         }
     }
 }
@@ -64,15 +67,15 @@ difference()
     {
         for (ii=[1:damage])
         {
-            wrap_x=(wall_width*basis+floor_thick*(wall_height-1));
+            wrap_x=(wall_width*basis+(wall_height-floor_thick));
             shapenum = floor(rands(0,16,1)[0])+1;
-            echo(shapenum);
+            //echo(shapenum);
             angle=floor(rands(0,360,1)[0])+1;
             xx=-wall_width*basis+wrap_x*(rands(0,1,1)[0]); //total area is the top (inch/2) and the wall (2 floor_thick)
             yy=basis*(rands(0,tiley,1)[0]);
             
-            translate([xx,yy,floor_thick*wall_height])rotate([0,0,angle])blemish(shapenum);
-            translate([0,0,floor_thick*wall_height])rotate([0,90,0])translate([xx,yy,0])rotate([0,0,angle])blemish(shapenum);
+            translate([xx,yy,wall_height])rotate([0,0,angle])blemish(shapenum);
+            translate([0,0,wall_height])rotate([0,90,0])translate([xx,yy,0])rotate([0,0,angle])blemish(shapenum);
             
         }
     }

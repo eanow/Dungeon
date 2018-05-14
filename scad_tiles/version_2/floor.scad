@@ -1,11 +1,14 @@
-floor_thick=8.5;
-tilex=2;
-tiley=2;
+
+floor_thick=10.6;
+floor_depth=2;
+//tilex=2;
+//tiley=2;
 basis=25.4;
-groove=.6;
+groove=1;
+floor_cut=.6;
 bevel=.8;
 
-damage=1;
+damage=0;
 damage_w=.15;
 layer_t=.2;
 ep=0.01;
@@ -14,64 +17,131 @@ print_wall=1.2;
 magnet_r=6/2;
 
 //floor
-
-module floor_plate()
+round(2);
+*square(2,2);
+module floor_plate(xsize,ysize)
 {
-    translate([tilex*basis/2,tiley*basis/2,floor_thick/2])hull()
+    translate([xsize*basis/2,ysize*basis/2,floor_thick/2])hull()
     {
-        cube([tilex*basis-bevel*2,tiley*basis-bevel*2,floor_thick],center=true);
-        cube([tilex*basis-bevel*2,tiley*basis,floor_thick-bevel*2],center=true);
-        cube([tilex*basis,tiley*basis-bevel*2,floor_thick-bevel*2],center=true);
+        cube([xsize*basis-bevel*2,ysize*basis-bevel*2,floor_thick],center=true);
+        cube([xsize*basis-bevel*2,ysize*basis,floor_thick-bevel*2],center=true);
+        cube([xsize*basis,ysize*basis-bevel*2,floor_thick-bevel*2],center=true);
     }
 }
-module grids()
+module grids(xsize,ysize)
 {
-    for (ii=[0:tilex])
+    for (ii=[0:xsize])
     {
-        translate([ii*basis,tiley*basis/2,floor_thick])rotate([0,45,0])cube([groove*sqrt(2),tiley*basis*2,groove*sqrt(2)],center=true);
+        translate([ii*basis,ysize*basis/2,floor_thick])rotate([0,45,0])cube([groove*sqrt(2),ysize*basis*2,groove*sqrt(2)],center=true);
+        translate([ii*basis,ysize*basis/2,floor_thick-floor_depth/2])rotate([0,0,0])cube([floor_cut,ysize*basis*2,floor_depth],center=true);
     }
-    for (ii=[0:tiley])
+    for (ii=[0:ysize])
     {
-        translate([tilex*basis/2,ii*basis,floor_thick])rotate([45,0,0])cube([tilex*basis*2,groove*sqrt(2),groove*sqrt(2)],center=true);
+        translate([xsize*basis/2,ii*basis,floor_thick])rotate([45,0,0])cube([xsize*basis*2,groove*sqrt(2),groove*sqrt(2)],center=true);
+        translate([xsize*basis/2,ii*basis,floor_thick-floor_depth/2])rotate([0,0,0])cube([xsize*basis*2,floor_cut,floor_depth],center=true);
     }
 }
-module mag_holes()
+module square_mag_holes(xsize,ysize)
 {
-    for (ii=[0:tilex-1])
+    for (ii=[0:xsize-1])
     {
         translate([ii*basis+basis*.5,magnet_r+print_wall,1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
-        translate([ii*basis+basis*.5,basis*tiley-(magnet_r+print_wall),1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+        translate([ii*basis+basis*.5,basis*ysize-(magnet_r+print_wall),1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
         //witness holes
         translate([ii*basis+basis*.5,magnet_r+print_wall,1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
-        translate([ii*basis+basis*.5,basis*tiley-(magnet_r+print_wall),1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
+        translate([ii*basis+basis*.5,basis*ysize-(magnet_r+print_wall),1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
     }
-    for (ii=[0:tiley-1])
+    for (ii=[0:ysize-1])
     {
         translate([magnet_r+print_wall,ii*basis+basis*.5,1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
-        translate([basis*tilex-(magnet_r+print_wall),ii*basis+basis*.5,1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+        translate([basis*xsize-(magnet_r+print_wall),ii*basis+basis*.5,1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
         //witness holes
         translate([magnet_r+print_wall,ii*basis+basis*.5,1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
-        translate([basis*tilex-(magnet_r+print_wall),ii*basis+basis*.5,1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
+        translate([basis*xsize-(magnet_r+print_wall),ii*basis+basis*.5,1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
     }
 }
-difference()
+module round_mag_holes(radius)
 {
-    floor_plate();
-    
-    if (damage>0)
+    //flat sides
+    for (ii=[0:radius-1])
     {
-        for (ii=[1:damage])
+        translate([ii*basis+basis*.5,magnet_r+print_wall,1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+
+        //witness holes
+        translate([ii*basis+basis*.5,magnet_r+print_wall,1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
+
+    }
+    for (ii=[0:radius-1])
+    {
+        translate([magnet_r+print_wall,ii*basis+basis*.5,1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+
+        //witness holes
+        translate([magnet_r+print_wall,ii*basis+basis*.5,1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
+
+    }
+    //round edges
+    
+    offset=sqrt((basis*radius*basis*radius)-(basis*basis/4))-magnet_r-print_wall;
+    //near y axis
+    translate([basis/2,offset,1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+    //witness holes
+    translate([basis/2,offset,1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
+    //near x axis
+    translate([offset,basis/2,1])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+    //witness holes
+    translate([offset,basis/2,1])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
+}
+module square(xsize,ysize)
+{
+    difference()
+    {
+        floor_plate(xsize,ysize);
+        
+        if (damage>0)
         {
-            shapenum = floor(rands(0,16,1)[0])+1;
-            angle=floor(rands(0,360,1)[0])+1;
-            xx=basis*(rands(0,tilex,1)[0]);
-            yy=basis*(rands(0,tiley,1)[0]);
-            translate([xx,yy,0])rotate([0,0,angle])translate([0,0,floor_thick])blemish(shapenum);
+            for (ii=[1:damage])
+            {
+                shapenum = floor(rands(0,16,1)[0])+1;
+                angle=floor(rands(0,360,1)[0])+1;
+                xx=basis*(rands(0,xsize,1)[0]);
+                yy=basis*(rands(0,ysize,1)[0]);
+                translate([xx,yy,0])rotate([0,0,angle])translate([0,0,floor_thick])blemish(shapenum);
+            }
+        }
+        grids(xsize,ysize);
+        square_mag_holes(xsize,ysize);
+    }
+}
+module round(radius)
+{
+    intersection()
+    {
+        difference()
+        {
+            floor_plate(radius,radius);
+            
+            if (damage>0)
+            {
+                for (ii=[1:damage])
+                {
+                    shapenum = floor(rands(0,16,1)[0])+1;
+                    angle=floor(rands(0,360,1)[0])+1;
+                    xx=basis*(rands(0,radius,1)[0]);
+                    yy=basis*(rands(0,radius,1)[0]);
+                    translate([xx,yy,0])rotate([0,0,angle])translate([0,0,floor_thick])blemish(shapenum);
+                }
+            }
+            grids(radius,radius);
+            #round_mag_holes(radius);
+        }
+        hull()
+        {
+            translate([0,0,bevel])cylinder(r=radius*basis,h=floor_thick-bevel*2,$fn=200);
+            cylinder(r=radius*basis-bevel,h=floor_thick,$fn=200);
         }
     }
-    grids();
-    mag_holes();
 }
+
 
 
 module selectshape(shapenum)
