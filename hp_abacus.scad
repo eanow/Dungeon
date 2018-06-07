@@ -5,17 +5,36 @@ rod=66.5;
 ep=0.01;
 $fa=1;
 $fs=1;
-rc=5; //rods
+bevel=.6;
+rc=6; //rods
 module frame()
 {
     difference()
     {
         //main body
         //translate([0,-bead/2-thick/2,5])cube([rod+thick+2*bead,4*bead+thick*3+thick*3,15],center=true);
-        translate([0,-(rc*(bead+thick/2)+thick*4)/2,5])cube([rod+thick+2*bead,rc*(bead+thick/2)+thick*4,15],center=true);
+        translate([0,-(rc*(bead+thick/2)+thick*4)/2,5])hull()
+        {
+            cube([rod+thick+2*bead-bevel*2,rc*(bead+thick/2)+thick*4,15-bevel*2],center=true);
+            cube([rod+thick+2*bead,rc*(bead+thick/2)+thick*4-bevel*2,15-bevel*2],center=true);
+            cube([rod+thick+2*bead-bevel*2,rc*(bead+thick/2)+thick*4-bevel*2,15],center=true);
+        }
         //inner space
         //translate([0,-bead/2-thick/2,5])cube([rod-thick,4*bead+thick*3+thick,20],center=true);
-        translate([0,-(rc*(bead+thick/2)+thick*4)/2,5])cube([rod-thick*2,rc*(bead+thick/2)+thick*2,20],center=true);
+        translate([0,-(rc*(bead+thick/2)+thick*4)/2,5])
+        {
+            cube([rod-thick*2,rc*(bead+thick/2)+thick*2,15+ep],center=true);
+            translate([0,0,15/2-bevel/2])hull()
+            {
+                cube([rod-thick*2,rc*(bead+thick/2)+thick*2,bevel],center=true);
+                translate([0,0,bevel])cube([rod-thick*2+bevel*2,rc*(bead+thick/2)+thick*2+bevel*2,ep],center=true);
+            }
+            translate([0,0,-15/2+bevel/2])hull()
+            {
+                cube([rod-thick*2,rc*(bead+thick/2)+thick*2,bevel],center=true);
+                translate([0,0,-bevel])cube([rod-thick*2+bevel*2,rc*(bead+thick/2)+thick*2+bevel*2,ep],center=true);
+            }
+        }
         //rods
         for (rody=[1:rc])
         {
@@ -80,14 +99,17 @@ module rod()
 }
 module bead()
 {
-    translate([0,0,thick/4])difference()
+    translate([0,0,0])difference()
     {
-        union()
+        hull()
         {
-            translate([0,0,-ep])cylinder(r1=bead/2,r2=bead/2-.5,h=thick/2,center=true);
-            translate([0,0,-(thick/2)])cylinder(r2=bead/2,r1=bead/2-.5,h=thick/2,center=true);
+            translate([0,0,0])cylinder(r=bead/2-.5,h=thick,center=true);
+            translate([0,0,0])cylinder(r=bead/2,h=ep,center=true);
         }
         cylinder(r=(thick+1)/2,h=thick*4,center=true,$fn=24);
+        translate([0,0,-thick/2-ep])cylinder(r1=(thick+1)/2+bevel,r2=(thick+1)/2,h=bevel,center=false,$fn=24);
+        translate([0,0,+thick/2+ep-bevel])cylinder(r2=(thick+1)/2+bevel,r1=(thick+1)/2,h=bevel,center=false,$fn=24);
+        
     }
 }
 module split_bead()
@@ -107,11 +129,11 @@ module split_bead()
     }
 }
 
-split_bead();
+//split_bead();
 //bead();
 //rod();
-//frame();
-//keeper();
+frame();
+keeper();
 //split frame
 module split_frame()
 {
