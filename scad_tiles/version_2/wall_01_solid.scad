@@ -103,6 +103,7 @@ module linear_wall(size)
     {
         linear_wall_base(size);
         linear_brick_grids(size);
+        *translate([-wall_width*basis,0,0])linear_brick_grids(size);
     }
 }
 

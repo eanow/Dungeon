@@ -20,15 +20,21 @@ print_wall=.7;
 //magnet
 magnet_r=6/2;
 //wall width
-wall_width=.45;
+wall_width=(magnet_r*2+print_wall*2)/basis;
 //how many layers of bricks
-wall_layers=3;
+wall_layers=5;
 //height of wall, short
-wall_height=1*basis;
+wall_height=1*basis+floor_thick;
 //brick grooves in wall
 wall_groove=.6;
+//easy lock removal
+removal_h=6.2;
+removal_w=7;
+removal_setback=8;
 $fs=1;
 $fa=1;
+//interior walls
+interior_thick=2*(1.2+wall_groove);
 
 module floor_plate(xsize,ysize)
 {
@@ -75,11 +81,13 @@ module square_openlocks(xsize,ysize)
         {
             translate([0,aa*basis,0])openlock_chamber(1);
         }
+        *translate([removal_w/2+removal_setback,basis*(ysize)*.5,removal_h/2-ep])cube([removal_w,basis*(ysize)-removal_setback*2,removal_h],center=true);
         //right side
         for(aa=[1:ysize-1])
         {
             translate([xsize*basis,aa*basis,0])rotate([0,0,180])openlock_chamber(1);
         }
+        *translate([(basis*xsize)-(removal_w/2+removal_setback),basis*(ysize)*.5,removal_h/2-ep])cube([removal_w,basis*(ysize)-removal_setback*2,removal_h],center=true);
     }
     if (xsize>1)
     {
@@ -88,11 +96,13 @@ module square_openlocks(xsize,ysize)
         {
             translate([aa*basis,0,0])rotate([0,0,90])openlock_chamber(1);
         }
+        *translate([basis*(xsize)*.5,removal_w/2+removal_setback,removal_h/2-ep])cube([basis*(xsize)-removal_setback*2,removal_w,removal_h],center=true);
         //back side
         for(aa=[1:xsize-1])
         {
             translate([aa*basis,ysize*basis,0])rotate([0,0,270])openlock_chamber(1);
         }
+        *translate([basis*(xsize)*.5,(ysize*basis)-(removal_w/2+removal_setback),removal_h/2-ep])cube([basis*(xsize)-removal_setback*2,removal_w,removal_h],center=true);
     }
 }
 module linear_openlocks(size)
@@ -112,6 +122,24 @@ module round_openlocks(size)
     {
         rotate([0,0,45])translate([size*basis,0,0])rotate([0,0,180])openlock_chamber(1);
     }
+    //left side
+    if (size>1)
+    {
+        for(aa=[1:size-1])
+        {
+            translate([0,aa*basis,0])openlock_chamber(1);
+        }
+        
+    }
+    if (size>1)
+    {
+        //front side
+        for(aa=[1:size-1])
+        {
+            translate([aa*basis,0,0])rotate([0,0,90])openlock_chamber(1);
+        }
+        
+    }
 }
 module round_wall_openlocks(size)
 {
@@ -119,6 +147,40 @@ module round_wall_openlocks(size)
     {
         rotate([0,0,45])translate([size*basis,0,0])openlock_chamber(1);
     }
+}
+*diagonal_mag_holes(2,2);
+module diagonal_mag_holes(xsize,ysize)
+{
+//flat sides
+  for (ii=[0:xsize-1])
+  {
+    translate([ii*basis+basis*.5,magnet_r+print_wall,1])rotate([0,0,360/32])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+
+    //witness holes
+    translate([ii*basis+basis*.5,magnet_r+print_wall,1])rotate([0,0,360/32])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
+
+  }
+  for (ii=[0:ysize-1])
+  {
+    translate([magnet_r+print_wall,ii*basis+basis*.5,1])rotate([0,0,360/32])cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+
+    //witness holes
+    translate([magnet_r+print_wall,ii*basis+basis*.5,1])rotate([0,0,360/32])cylinder(r=.9,h=floor_thick,center=true,$fn=16);
+
+  }
+  //diagonal edge
+  if ((xsize==2)&&(ysize==2))
+  {
+    translate([basis/2,2*basis-basis/2-magnet_r,0])
+    {
+      cylinder(r=magnet_r,h=magnet_r*2,$fn=16);
+    }
+  }
+}
+*%hull()
+{
+  square([4*basis,ep],center=true);
+  square([ep,4*basis],center=true);
 }
 module square_mag_holes(xsize,ysize)
 {
