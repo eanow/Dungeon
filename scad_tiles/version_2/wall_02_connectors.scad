@@ -4,7 +4,8 @@ use <wall_01_solid.scad>;
 *linear_wall(4);
 *round_wall(2);
 *linear_final(2);
-round_final(2);
+*round_final(2);
+corner_final(1);
 *import("floor_02_round_solid_final.stl");
 
 *round_mag_holes(2);
@@ -46,6 +47,26 @@ module round_final(size)
             round_wall(size);
             round_wall_holes(size);
             //round_wall_openlocks(size,size);
+        }
+    }
+}
+
+module corner_final(size)
+{
+    *intersection()
+    {
+        import("wall_corner_01_final.stl");
+        translate([0,0,wall_height/2-ep+floor_thick])cube([size*3*basis,size*3*basis,wall_height],center=true);
+    }
+
+    intersection()
+    {
+        *cube([size*3*basis,size*3*basis,2*(floor_thick)],center=true);
+        difference()
+        {
+            corner_wall(size);
+            linear_mag_holes(size);
+            //linear_openlocks(size,size);
         }
     }
 }

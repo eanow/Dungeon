@@ -10,7 +10,8 @@ module interior_final()
 {
   intersection()
   {
-    import("interior_0202_short_middle_chipped_d.stl");
+    *import("interior_0202_corner.stl");
+    plus();
     translate([0,0,wall_height+floor_thick-ep])cube([2*3*basis,2*3*basis,(wall_height+floor_depth)*2],center=true);
   }
 

@@ -33,6 +33,8 @@ removal_w=7;
 removal_setback=8;
 $fs=1;
 $fa=1;
+//slope wall
+wall_tol=.2;
 //interior walls
 interior_thick=2*(1.2+wall_groove);
 

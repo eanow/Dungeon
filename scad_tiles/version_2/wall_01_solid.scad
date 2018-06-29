@@ -2,7 +2,8 @@ include <libs.scad>;
 
 //wall
 *linear_wall(4);
-round_wall(2);
+*round_wall(2);
+corner_wall(1);
 
 module linear_wall_base(size)
 {
@@ -105,5 +106,28 @@ module linear_wall(size)
         linear_brick_grids(size);
         *translate([-wall_width*basis,0,0])linear_brick_grids(size);
     }
+}
+
+module corner_wall(size)
+{
+  intersection()
+  {
+    linear_wall(size);
+    //45 degree slope so we can do inside corners
+    translate([0,0,0])hull()
+    {
+      //beveling
+      translate([0,0,-ep])linear_extrude(wall_height+ep*2)offset(delta=-bevel)hull()
+      {
+        translate([0,basis*0.5*size])square([ep,basis*size-wall_tol*2],center=true);
+        translate([-wall_width*basis,basis*0.5*size])square([ep,basis*size-wall_tol*2-wall_width*2*basis],center=true);
+      }
+      translate([0,0,bevel])linear_extrude(wall_height-bevel*2)hull()
+      {
+        translate([0,basis*0.5*size])square([ep,basis*size-wall_tol*2],center=true);
+        translate([-wall_width*basis,basis*0.5*size])square([ep,basis*size-wall_tol*2-wall_width*2*basis],center=true);
+      }
+    }
+  }
 }
 
