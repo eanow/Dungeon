@@ -7,11 +7,11 @@ corner_wall(1);
 
 module linear_wall_base(size)
 {
-    translate([-wall_width*basis/2,size*basis/2,wall_height/2])hull()
+    translate([-wall_width/2,size*basis/2,wall_height/2])hull()
     {
-        cube([wall_width*basis-bevel*2,size*basis,wall_height-bevel*2],center=true);
-        cube([wall_width*basis-bevel*2,size*basis-bevel*2,wall_height],center=true);
-        cube([wall_width*basis,size*basis-bevel*2,wall_height-bevel*2],center=true);
+        cube([wall_width-bevel*2,size*basis,wall_height-bevel*2],center=true);
+        cube([wall_width-bevel*2,size*basis-bevel*2,wall_height],center=true);
+        cube([wall_width,size*basis-bevel*2,wall_height-bevel*2],center=true);
     }
 }
 
@@ -21,8 +21,8 @@ module round_wall_base(size)
     {
         hull()
         {
-            translate([0,0,bevel])cylinder(r=size*basis+basis*wall_width,h=wall_height-bevel*2);
-            cylinder(r=size*basis+basis*wall_width-bevel,h=wall_height);
+            translate([0,0,bevel])cylinder(r=size*basis+wall_width,h=wall_height-bevel*2);
+            cylinder(r=size*basis+wall_width-bevel,h=wall_height);
         }
         cylinder(r=size*basis,h=wall_height);
         translate([0,0,-ep])cylinder(r1=size*basis+bevel,r2=size*basis,h=bevel);
@@ -74,15 +74,15 @@ module round_brick_grids(size)
 
 module round_wall(size)
 {
-    xx=basis*size+basis*wall_width;
-    yy=basis*size+basis*wall_width;
+    xx=basis*size+wall_width;
+    yy=basis*size+wall_width;
     zz=wall_height;
     difference()
     {
         intersection()
         {
             round_wall_base(size);
-            translate([.5*(basis*size+basis*wall_width),.5*(basis*size+basis*wall_width),wall_height/2])hull()
+            translate([.5*(basis*size+wall_width),.5*(basis*size+wall_width),wall_height/2])hull()
             {
                 cube([xx-bevel*2,yy,zz-bevel*2],center=true);
                 cube([xx-bevel*2,yy-bevel*2,zz],center=true);
@@ -104,7 +104,7 @@ module linear_wall(size)
     {
         linear_wall_base(size);
         linear_brick_grids(size);
-        *translate([-wall_width*basis,0,0])linear_brick_grids(size);
+        *translate([-wall_width,0,0])linear_brick_grids(size);
     }
 }
 
@@ -120,12 +120,12 @@ module corner_wall(size)
       translate([0,0,-ep])linear_extrude(wall_height+ep*2)offset(delta=-bevel)hull()
       {
         translate([0,basis*0.5*size])square([ep,basis*size-wall_tol*2],center=true);
-        translate([-wall_width*basis,basis*0.5*size])square([ep,basis*size-wall_tol*2-wall_width*2*basis],center=true);
+        translate([-wall_width,basis*0.5*size])square([ep,basis*size-wall_tol*2-wall_width*2],center=true);
       }
       translate([0,0,bevel])linear_extrude(wall_height-bevel*2)hull()
       {
         translate([0,basis*0.5*size])square([ep,basis*size-wall_tol*2],center=true);
-        translate([-wall_width*basis,basis*0.5*size])square([ep,basis*size-wall_tol*2-wall_width*2*basis],center=true);
+        translate([-wall_width,basis*0.5*size])square([ep,basis*size-wall_tol*2-wall_width*2],center=true);
       }
     }
   }

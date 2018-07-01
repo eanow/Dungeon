@@ -20,7 +20,7 @@ module interior_final()
     cube([2*3*basis,2*3*basis,2*(floor_thick-floor_depth-ep)],center=true);
     difference()
     {
-      square(2,2);
+      square_floor(2,2);
       square_mag_holes(2,2);
       square_openlocks(2,2);
     }

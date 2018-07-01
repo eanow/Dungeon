@@ -13,6 +13,8 @@ floor_cut=1;
 bevel=.8;
 //layer thickness
 layer_t=.2;
+//line width
+line_w=.4;
 //small value
 ep=0.01;
 //how much wall to put around the magnets
@@ -20,7 +22,7 @@ print_wall=.7;
 //magnet
 magnet_r=6/2;
 //wall width
-wall_width=(magnet_r*2+print_wall*2)/basis;
+wall_width=(magnet_r*2+print_wall*2);
 //how many layers of bricks
 wall_layers=5;
 //height of wall, short
@@ -37,6 +39,16 @@ $fa=1;
 wall_tol=.2;
 //interior walls
 interior_thick=2*(1.2+wall_groove);
+//door
+door_height=wall_height-3-floor_thick;
+door_h_tol=.6;
+door_w_tol=.4;
+dual_door_width=2*basis-2*(wall_width);
+door_pin_r=1.75/2+.2;
+door_deco_inset=.3;
+hinge_t=.8;
+//steps
+step_up=2.8;
 
 module floor_plate(xsize,ysize)
 {

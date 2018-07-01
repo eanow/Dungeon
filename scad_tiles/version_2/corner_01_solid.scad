@@ -16,7 +16,7 @@ module convex_linear()
         rotate([0,0,90])translate([0,-basis,0])linear_wall_base(2);
       }
       //cut down the part that sticks out the back
-      translate([basis-wall_width*basis,basis-wall_width*basis,wall_height/2])hull()
+      translate([basis-wall_width,basis-wall_width,wall_height/2])hull()
       {
         cube([2*basis-bevel*2,2*basis-bevel*2,wall_height],center=true);
         cube([2*basis-bevel*2,2*basis,wall_height-bevel*2],center=true);

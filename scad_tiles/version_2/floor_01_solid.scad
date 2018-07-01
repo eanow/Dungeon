@@ -3,12 +3,12 @@ include <libs.scad>;
 //floor
 *round(2);
 diagonal(2,2);
-*square(2,2);
+*square_floor(2,2);
 
 //import("AS_full.stl");
 
 
-module square(xsize,ysize)
+module square_floor(xsize,ysize)
 {
   difference()
   {

@@ -11,7 +11,7 @@ corner();
 module long_mid()
 {
   //floor
-  square(2,2);
+  square_floor(2,2);
   //thin interior wall
   translate([basis,0,0])intersection()
   {
@@ -23,7 +23,7 @@ module long_mid()
 module short_mid()
 {
   //floor
-  square(2,2);
+  square_floor(2,2);
   //thin interior wall
   translate([basis,0,0])intersection()
   {
@@ -35,7 +35,7 @@ module short_mid()
 module tee()
 {
   //floor
-  square(2,2);
+  square_floor(2,2);
   //thin interior wall
   translate([basis,0,0])intersection()
   {
@@ -52,7 +52,7 @@ module tee()
 module plus()
 {
   //floor
-  square(2,2);
+  square_floor(2,2);
   //thin interior wall
   translate([basis,0,0])intersection()
   {
@@ -69,7 +69,7 @@ module plus()
 module corner()
 {
   //floor
-  square(2,2);
+  square_floor(2,2);
   //thin interior wall
   translate([basis,0,0])intersection()
   {

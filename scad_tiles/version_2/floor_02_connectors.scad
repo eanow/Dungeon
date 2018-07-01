@@ -19,7 +19,7 @@ module square_final(xsize,ysize)
     cube([xsize*3*basis,ysize*3*basis,2*(floor_thick-floor_depth-ep)],center=true);
     difference()
     {
-      square(xsize,ysize);
+      square_floor(xsize,ysize);
       square_mag_holes(xsize,ysize);
       square_openlocks(xsize,ysize);
     }
