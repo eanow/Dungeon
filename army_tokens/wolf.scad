@@ -6,8 +6,8 @@ dia=25.4;
 thick=3;
 intersection()
 {
-    scale(.11)linear_extrude(height=50)translate([11,0,0])import("bow.dxf");
-    translate([0,0,-(45-2)])sphere(r=45,$fn=100);
+    linear_extrude(height=10)scale(.43)translate([-27,-24,0])import("wolf.dxf");
+    translate([0,0,-(45-2)])sphere(r=45,$fn=150);
 }
 translate([0,0,-3+ep])difference()
 {
@@ -18,5 +18,3 @@ translate([0,0,-3+ep])difference()
     }
     translate([0,0,-round])cube([dia*2,dia*2,round*2],center=true);
 }
-
-*%import("bow.stl");

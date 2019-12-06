@@ -3,15 +3,28 @@ include <libs.scad>;
 //wall
 *linear_wall(4);
 *round_wall(2);
-corner_wall(1);
+corner_wall(6);
+*shim_wall(2);
+*import("finalized_stl/square_floor/floor_square_2x2_a.stl");
 
-module linear_wall_base(size)
+module shim_wall(size)
 {
-    translate([-wall_width/2,size*basis/2,wall_height/2])hull()
+  translate([-wall_width/2,size*basis/2,floor_thick/2])hull()
+  {
+    cube([wall_width,basis*size-bevel*2,floor_thick-bevel*2],center=true);
+    cube([wall_width-bevel*2,basis*size,floor_thick-bevel*2],center=true);
+    cube([wall_width-bevel*2,basis*size-bevel*2,floor_thick],center=true);
+  }
+}
+
+
+module linear_wall_base(size, height=wall_height)
+{
+    translate([-wall_width/2,size*basis/2,height/2])hull()
     {
-        cube([wall_width-bevel*2,size*basis,wall_height-bevel*2],center=true);
-        cube([wall_width-bevel*2,size*basis-bevel*2,wall_height],center=true);
-        cube([wall_width,size*basis-bevel*2,wall_height-bevel*2],center=true);
+        cube([wall_width-bevel*2,size*basis,height-bevel*2],center=true);
+        cube([wall_width-bevel*2,size*basis-bevel*2,height],center=true);
+        cube([wall_width,size*basis-bevel*2,height-bevel*2],center=true);
     }
 }
 

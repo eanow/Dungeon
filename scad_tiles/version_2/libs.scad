@@ -25,8 +25,11 @@ magnet_r=6/2;
 wall_width=(magnet_r*2+print_wall*2);
 //how many layers of bricks
 wall_layers=5;
+door_layers=9;
 //height of wall, short
 wall_height=1*basis+floor_thick;
+//height of door, scale
+doorway_height=55.6;//9*basis/5+floor_thick;
 //brick grooves in wall
 wall_groove=.6;
 //easy lock removal
@@ -35,13 +38,16 @@ removal_w=7;
 removal_setback=8;
 $fs=1;
 $fa=1;
+//window
+window_w=.4*basis;
 //slope wall
 wall_tol=.2;
 //interior walls
 interior_thick=2*(1.2+wall_groove);
 //door
-door_height=wall_height-3-floor_thick;
-door_h_tol=.6;
+//door_height=wall_height-3-floor_thick;
+door_height=doorway_height-5-floor_thick;
+door_h_tol=.8;
 door_w_tol=.4;
 dual_door_width=2*basis-2*(wall_width);
 door_pin_r=1.75/2+.2;

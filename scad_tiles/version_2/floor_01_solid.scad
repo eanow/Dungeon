@@ -2,8 +2,8 @@ include <libs.scad>;
 
 //floor
 *round(2);
-diagonal(2,2);
-*square_floor(2,2);
+*diagonal(3,4);
+square_floor(6,6);
 
 //import("AS_full.stl");
 

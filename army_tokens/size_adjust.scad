@@ -2,13 +2,12 @@
 //$fs=1;
 ep=.01;
 round=1;
-dia=25.4;
+//dia=25.4*2;
+dia=34.25*2;
+inner_dia=25.4+.4;
 thick=3;
-intersection()
-{
-    scale(.11)linear_extrude(height=50)translate([11,0,0])import("bow.dxf");
-    translate([0,0,-(45-2)])sphere(r=45,$fn=100);
-}
+bevel=0.6;
+
 translate([0,0,-3+ep])difference()
 {
     minkowski()
@@ -17,6 +16,7 @@ translate([0,0,-3+ep])difference()
         sphere(r=round,$fn=50);
     }
     translate([0,0,-round])cube([dia*2,dia*2,round*2],center=true);
+    cylinder(r=inner_dia/2,h=thick,$fn=100);
+    translate([0,0,-ep])cylinder(r2=inner_dia/2,r1=inner_dia/2+bevel,h=bevel,$fn=100);
+    translate([0,0,thick+ep-bevel])cylinder(r1=inner_dia/2,r2=inner_dia/2+bevel,h=bevel,$fn=100);
 }
-
-*%import("bow.stl");
